@@ -38,7 +38,7 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	PensionDetails pd = new PensionDetails("666666666666", "test",date, 
 			"TEST5568P", 50000, 10000, "self",bd, (0.8*50000),550);
 		
-	String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY2MDY2NDc3NSwiaWF0IjoxNjYwNjYyOTc1fQ.k5LJZdU2l3BEePFvCnV9wYaEKargkKeMDeNNf9zknEs";
+	String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY2MDY2NjgzMCwiaWF0IjoxNjYwNjY1MDMwfQ.bu977mtqn_VTPli68NsOk8NvohHUee3RBFDiyagoBl8";
 
 	@Test
 	void contextLoads() {
