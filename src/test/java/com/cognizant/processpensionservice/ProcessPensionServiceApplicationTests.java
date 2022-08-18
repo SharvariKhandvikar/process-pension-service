@@ -16,17 +16,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cognizant.processpensionservice.bean.BankDetails;
 import com.cognizant.processpensionservice.bean.PensionDetails;
+import com.cognizant.processpensionservice.bean.Token;
+import com.cognizant.processpensionservice.bean.UserLogin;
 import com.cognizant.processpensionservice.controller.PensionDetailsController;
+import com.cognizant.processpensionservice.proxy.AuthenticationProxy;
 import com.cognizant.processpensionservice.proxy.PensionerDetailsProxy;
 import com.cognizant.processpensionservice.repository.PensionDetailsRepository;
 
 @SpringBootTest
 class ProcessPensionServiceApplicationTests {
-	
-//	@Test
-//	void contextLoads() {
-//		
-//	}
+
 	
 Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class);
 	
@@ -36,6 +35,8 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	PensionDetailsRepository pensionRepo;
 	@Autowired
 	private PensionerDetailsProxy proxy;
+	@Autowired
+	private AuthenticationProxy authProxy;
 	
 	
 	Date date = new Date();
@@ -43,8 +44,6 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	PensionDetails pd = new PensionDetails("666666666666", "test",date, 
 			"TEST5568P", 50000, 10000, "self",bd, (0.8*50000),550);
 		
-	String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY2MDY2ODk4OSwiaWF0IjoxNjYwNjY3MTg5fQ.m-wA7p9RHHpzPeJN9I44ZUGk7cq9pQRzHlhDI8CUEg4";
-
 	@Test
 	void contextLoads() {
 	}
@@ -52,6 +51,8 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	@Test
 	void testGetPensionerDetails1() {
 		String adharNumber = "110911599416";
+		String token = controller.generateToken();
+		log.info("token passing to request ======>>>> "+token);
 		PensionDetails expected = proxy.getPensionerDetailsByAdhar(token, adharNumber);
 		double pensionAmount = (((double)expected.getSalaryEarned()*80)/100)+(double)expected.getAllowances();
 				
@@ -79,6 +80,8 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	@Test
 	void testGetPensionerDetails2() {
 		String adharNumber = "556781253840";
+		String token = controller.generateToken();
+		log.info("token passing to request ======>>>> "+token);
 		PensionDetails expected = proxy.getPensionerDetailsByAdhar(token, adharNumber);
 		double pensionAmount =(((double)expected.getSalaryEarned()*50)/100)+(double)expected.getAllowances();
 				
@@ -106,13 +109,12 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	@Test
 	void testGetPensionDetailsException() {
 		String adharNumber = "110911599419";
+		String token = controller.generateToken();
+		log.info("token passing to request ======>>>> "+token);
 		Exception thrown = assertThrows(RuntimeException.class,() -> controller.processPension(token, adharNumber),
 				"Exception did not matched!!!");
 		
 		log.info("Message: "+thrown.getMessage());
-
-		//assertTrue(thrown.getMessage().contains("Invalid"));
-		
 	}
 	
 	@Test
@@ -124,7 +126,6 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 		
 		log.info("Message: "+thrown.getMessage());
 
-		//assertTrue(thrown.getMessage().contains("invalid token"));
 		
 	}
 
@@ -139,6 +140,8 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	void testSetFunctions() {
 		PensionDetails pend = new PensionDetails();
 		BankDetails bankd = new BankDetails();
+		UserLogin user = new UserLogin();
+		Token tok = new Token();
 		pend.setAdharNumber("4444444444444444");
 		pend.setAllowances(5000);
 		pend.setDob(new Date());
@@ -154,6 +157,9 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 		pend.setPensionAmount(0.5*70000);
 		bankd.setPensionDetails(pend);
 		bankd.getPensionDetails();
+		user.setUserName("dummy");
+		user.setPassword("dummypass");
+		tok.setToken("sumdjk");
 		assertTrue(true);
 	}
 	

@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognizant.processpensionservice.bean.BankDetails;
 import com.cognizant.processpensionservice.bean.PensionDetails;
+import com.cognizant.processpensionservice.bean.UserLogin;
+import com.cognizant.processpensionservice.proxy.AuthenticationProxy;
 import com.cognizant.processpensionservice.proxy.PensionerDetailsProxy;
 import com.cognizant.processpensionservice.repository.BankDetailsRepository;
 import com.cognizant.processpensionservice.repository.PensionDetailsRepository;
@@ -28,6 +29,9 @@ public class PensionDetailsController {
 	private PensionerDetailsProxy proxy;
 	
 	@Autowired
+	private AuthenticationProxy authProxy;
+	
+	@Autowired
 	private PensionDetailsRepository repo;
 	
 	@Autowired
@@ -35,7 +39,7 @@ public class PensionDetailsController {
 	
 	public ResponseEntity authenticationResponse;
 	
-	@PostMapping("/process-pension/pensionDetails/{adharNumber}")
+	@PostMapping("/pensionDetails/{adharNumber}")
 	public PensionDetails processPension(@RequestHeader(name = "Authorization") String token,
 			@PathVariable("adharNumber") String adharNumber){
 		PensionDetails pd = proxy.getPensionerDetailsByAdhar(token, adharNumber);
@@ -66,5 +70,12 @@ public class PensionDetailsController {
 		repo.save(pd);
 		return pd;			
 		
+	}
+	
+	//To generate token for Junit testing
+	public String  generateToken() {
+		String token = authProxy.login(new UserLogin("user1", "user1")).getToken();
+		logger.info("token ======>>>> "+token);
+		return token;
 	}
 }

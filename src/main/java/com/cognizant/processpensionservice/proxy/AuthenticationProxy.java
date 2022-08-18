@@ -1,18 +1,24 @@
 package com.cognizant.processpensionservice.proxy;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "auth-service", url = "localhost:8084")
+import com.cognizant.processpensionservice.bean.Token;
+import com.cognizant.processpensionservice.bean.UserLogin;
+
+
+@FeignClient(name = "auth-service", url = "${AUTHENTICATION_SERVICE_PROXY:http://localhost:8084}")
 public interface AuthenticationProxy {
 
-	@GetMapping("/validate")
-	//@ApiOperation(value = "tokenValidation", notes = "returns boolean after validating JWT", httpMethod = "GET", response = ResponseEntity.class)
-	public //ResponseEntity<Object> 
-	boolean getValidity(
-			//@ApiParam(name = "token", value = "JWT for current user")
+	@GetMapping("/auth/validate")
+	public boolean getValidity(
 			@RequestHeader(name = "Authorization") String token1);
+	
+	@PostMapping("/auth/login")
+	public Token login(
+			@RequestBody UserLogin userLoginCredentials);
 	
 }

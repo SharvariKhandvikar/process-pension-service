@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cognizant.processpensionservice.bean.PensionDetails;
 
-@FeignClient(name = "pensioner-details", url = "localhost:8000")
-//@FeignClient(name = "pensioner-details")
+@FeignClient(name = "pensioner-details", url = "${PENSIONER_DETAILS_SERVICE_PROXY:http://localhost:8000}")
 public interface PensionerDetailsProxy {
 	
 	@GetMapping("/pensioner-details/pensionerdetails/{adharNumber}")
