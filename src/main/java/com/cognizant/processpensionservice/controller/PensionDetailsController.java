@@ -1,7 +1,5 @@
 package com.cognizant.processpensionservice.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,12 +16,13 @@ import com.cognizant.processpensionservice.proxy.PensionerDetailsProxy;
 import com.cognizant.processpensionservice.repository.BankDetailsRepository;
 import com.cognizant.processpensionservice.repository.PensionDetailsRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-//@RequestMapping("/processpension")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PensionDetailsController {
 
-	Logger logger = LoggerFactory.getLogger(PensionDetailsController.class);
 	
 	@Autowired
 	private PensionerDetailsProxy proxy;
@@ -39,13 +38,16 @@ public class PensionDetailsController {
 	
 	public ResponseEntity authenticationResponse;
 	
+	//Get and save the pension details 
+	//Requires the adhar number and authorization token
 	@PostMapping("/pensionDetails/{adharNumber}")
 	public PensionDetails processPension(@RequestHeader(name = "Authorization") String token,
 			@PathVariable("adharNumber") String adharNumber){
+		log.info("Getting pensioner details from service ...");
 		PensionDetails pd = proxy.getPensionerDetailsByAdhar(token, adharNumber);
 		
-		logger.info("Body is ==============>>>>>"+pd);
-		
+		log.info("Pensioner is... "+pd);
+		log.info("Calculating pension ammount and bank service charges...");
 		double pensionAmount;
 		
 		if(pd.getPensionType().equals("self"))
@@ -68,6 +70,7 @@ public class PensionDetailsController {
 		}	
 		bankRepo.save(pd.getBankDetails());
 		repo.save(pd);
+		log.info("Returning pension details...");
 		return pd;			
 		
 	}
@@ -75,7 +78,7 @@ public class PensionDetailsController {
 	//To generate token for Junit testing
 	public String  generateToken() {
 		String token = authProxy.login(new UserLogin("user1", "user1")).getToken();
-		logger.info("token ======>>>> "+token);
+		log.info("token... "+token);
 		return token;
 	}
 }

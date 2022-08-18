@@ -46,10 +46,12 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 		
 	@Test
 	void contextLoads() {
+		assertTrue(true);
 	}
 
 	@Test
 	void testGetPensionerDetails1() {
+		log.info("Validate the pesion details service for valid details ...");
 		String adharNumber = "110911599416";
 		String token = controller.generateToken();
 		log.info("token passing to request ======>>>> "+token);
@@ -79,9 +81,9 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	
 	@Test
 	void testGetPensionerDetails2() {
+		log.info("Validate the pesion details service for valid details ...");
 		String adharNumber = "556781253840";
 		String token = controller.generateToken();
-		log.info("token passing to request ======>>>> "+token);
 		PensionDetails expected = proxy.getPensionerDetailsByAdhar(token, adharNumber);
 		double pensionAmount =(((double)expected.getSalaryEarned()*50)/100)+(double)expected.getAllowances();
 				
@@ -108,6 +110,7 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	
 	@Test
 	void testGetPensionDetailsException() {
+		log.info("Validate the pesion details service for invalid adhar number ...");
 		String adharNumber = "110911599419";
 		String token = controller.generateToken();
 		log.info("token passing to request ======>>>> "+token);
@@ -119,6 +122,7 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	
 	@Test
 	void testGetPensionDetailsAuthException() {
+		log.info("Validate the pesion details service for invalid token ...");
 		String adharNumber = "110911599416";
 		RuntimeException thrown = assertThrows(RuntimeException.class,
 				() -> controller.processPension("exception token", adharNumber),
@@ -131,6 +135,7 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 
 	@Test
 	void applicationStarts() throws IOException {
+		log.info("Validate application start ...");
 		ProcessPensionServiceApplication.main(new String[] {});
 		assertTrue(true);
 	}
@@ -138,6 +143,7 @@ Logger log = LoggerFactory.getLogger(ProcessPensionServiceApplicationTests.class
 	
 	@Test
 	void testSetFunctions() {
+		log.info("Validate the entity classes ...");
 		PensionDetails pend = new PensionDetails();
 		BankDetails bankd = new BankDetails();
 		UserLogin user = new UserLogin();

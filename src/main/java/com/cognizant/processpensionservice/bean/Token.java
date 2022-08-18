@@ -1,21 +1,15 @@
 package com.cognizant.processpensionservice.bean;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+//Class token will get token generated after loged in valid user 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Token {
 
 	private String token;
-
-	public Token() {
-		super();
-	}
-
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
 	
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import com.cognizant.processpensionservice.bean.Token;
 import com.cognizant.processpensionservice.bean.UserLogin;
 
-
+//Feign client authentication proxy 
 @FeignClient(name = "auth-service", url = "${AUTHENTICATION_SERVICE_PROXY:http://localhost:8084}")
 public interface AuthenticationProxy {
 
